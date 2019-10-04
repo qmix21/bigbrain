@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    external_links:
+      - core_db
+    volumes:
+      - ../www:/var/www/html
+      - ./php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./exim.conf:/etc/exim/exim.conf
+      - ./vhost.conf:/etc/apache2/sites-available/000-default.conf
+      - ../data/logs/error.log:/var/www/error.log
+      - ../data/logs/access.log:/var/www/access.log
+    environment:
+      VIRTUAL_HOST: ${BRAND}.guru
+      DB_HOST: core_db
+      DB_PASSWORD: password
+      LETSENCRYPT_HOST: ${BRAND}.guru
+      LETSENCRYPT_EMAIL: qmix21@qmix21.com
+    restart: always
+    container_name: ${COMPOSE_PROJECT_NAME}
+    networks:
+      default:
+        ipv4_address: ${WHMCS_IP}
+
+networks:
+    default:
+      external:
+        name: webproxy
