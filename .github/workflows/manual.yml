@@ -1,18 +1,17 @@
-name: Merge branch with labeled
+name: Merge master to develop
 on:
   push:
     branches:
-      - master
+      - 'master'
 jobs:
   merge-branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
 
-      - name: Merge by master -> develop
+      - name: Merge master -> develop
         uses: devmasx/merge-branch@v1.3.0
         with:
           type: now
-          from_branch: master
           target_branch: develop
           github_token: ${{ github.token }}
